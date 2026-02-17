@@ -4,7 +4,8 @@ import { formatLaunchDate } from "@/utils/commonfunction";
 import { Image } from "expo-image";
 import React from "react";
 import { Text, View } from "react-native";
-import { styles } from "./DetailScreen.styles";
+import { styles } from "../DetailScreen.styles";
+import { SecureNotesSection } from "./SecureNotesSection";
 
 interface OverviewTabProps {
   launch: Launch;
@@ -60,6 +61,8 @@ export const OverviewTab = ({ launch, theme }: OverviewTabProps) => {
           {launch.rocket}
         </Text>
       </View>
+
+      <SecureNotesSection launchId={launch.id} theme={theme} />
     </View>
   );
 };

@@ -3,15 +3,19 @@ import { LaunchRepository } from '../data/repository';
 import { useFilterStore } from '../store';
 
 export function useLaunches() {
-    const { year, success, upcoming, search } = useFilterStore();
+    const { year, success, upcoming, search, rocket, launchpad, dateRange, sort } = useFilterStore();
 
     return useQuery({
-        queryKey: ['launches', { year, success, upcoming, search }],
+        queryKey: ['launches', { year, success, upcoming, search, rocket, launchpad, dateRange, sort }],
         queryFn: () => LaunchRepository.getLaunches(0, 1000, {
             year: year || undefined,
             success: success ?? undefined,
             upcoming: upcoming ?? undefined,
-            search: search || undefined
+            search: search || undefined,
+            rocket: rocket || undefined,
+            launchpad: launchpad || undefined,
+            dateRange: dateRange || undefined,
+            sort: sort || undefined
         }),
     });
 }

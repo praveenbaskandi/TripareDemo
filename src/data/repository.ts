@@ -20,7 +20,7 @@ export class LaunchRepository {
                             launch.name,
                             launch.date_utc,
                             launch.date_unix,
-                            launch.success ? 1 : 0,
+                            launch.success === null ? null : (launch.success ? 1 : 0),
                             launch.rocket,
                             launch.launchpad,
                             launch.details,
@@ -77,7 +77,16 @@ export class LaunchRepository {
     static async getLaunches(
         offset = 0,
         limit = 20,
-        filters?: { year?: string; success?: boolean; upcoming?: boolean; search?: string }
+        filters?: {
+            year?: string;
+            success?: boolean;
+            upcoming?: boolean;
+            search?: string;
+            rocket?: string;
+            launchpad?: string;
+            dateRange?: 'last30' | 'lastYear' | 'all';
+            sort?: 'dateDesc' | 'dateAsc' | 'nameAsc';
+        }
     ): Promise<Launch[]> {
         const db = await openDatabase();
 
@@ -100,16 +109,52 @@ export class LaunchRepository {
             query += ' AND name LIKE ?';
             params.push(`%${filters.search}%`);
         }
+        if (filters?.rocket) {
+            query += ' AND rocket_id = ?';
+            params.push(filters.rocket);
+        }
+        if (filters?.launchpad) {
+            query += ' AND launchpad_id = ?';
+            params.push(filters.launchpad);
+        }
+        if (filters?.dateRange) {
+            // Get the latest launch date to use as reference "now"
+            // This handles cases where data is old (e.g. 2022) but system time is current (e.g. 2026)
+            const latestLaunch = await db.getFirstAsync<{ date_unix: number }>('SELECT MAX(date_unix) as date_unix FROM launches');
+            const referenceDate = latestLaunch?.date_unix || Math.floor(Date.now() / 1000);
 
-        query += ' ORDER BY date_unix DESC LIMIT ? OFFSET ?';
+            if (filters.dateRange === 'last30') {
+                const thirtyDaysAgo = referenceDate - 30 * 24 * 60 * 60;
+                query += ' AND date_unix >= ? AND date_unix <= ?';
+                params.push(thirtyDaysAgo, referenceDate);
+            } else if (filters.dateRange === 'lastYear') {
+                const oneYearAgo = referenceDate - 365 * 24 * 60 * 60;
+                query += ' AND date_unix >= ? AND date_unix <= ?';
+                params.push(oneYearAgo, referenceDate);
+            }
+        }
+
+        let orderBy = 'ORDER BY date_unix DESC';
+        if (filters?.sort === 'dateAsc') {
+            orderBy = 'ORDER BY date_unix ASC';
+        } else if (filters?.sort === 'nameAsc') {
+            orderBy = 'ORDER BY name ASC';
+        }
+
+        query += ` ${orderBy} LIMIT ? OFFSET ?`;
         params.push(limit, offset);
 
         const result = await db.getAllAsync(query, params);
 
         // Map back to Launch interface
         return result.map((row: any) => ({
-            ...row,
-            success: row.success === 1,
+            id: row.id,
+            name: row.name,
+            date_utc: row.date_utc,
+            date_unix: row.date_unix,
+            details: row.details,
+            flight_number: row.flight_number,
+            success: row.success === null ? null : (row.success === 1),
             upcoming: row.upcoming === 1,
             rocket: row.rocket_id,
             launchpad: row.launchpad_id,

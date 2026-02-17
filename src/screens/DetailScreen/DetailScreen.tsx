@@ -6,9 +6,9 @@ import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import React, { useLayoutEffect } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./DetailScreen.styles";
-import { LaunchpadTab } from "./LaunchpadTab";
-import { MediaTab } from "./MediaTab";
-import { OverviewTab } from "./OverviewTab";
+import { LaunchpadTab } from "./LaunchpadTab/LaunchpadTab";
+import { MediaTab } from "./MediaTab/MediaTab";
+import { OverviewTab } from "./OverviewTab/OverviewTab";
 import { useDetailScreenLogic } from "./useDetailScreenLogic";
 
 export default function DetailScreen() {
@@ -29,6 +29,11 @@ export default function DetailScreen() {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: launch?.name || Strings.general.loading,
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 10 }}>
+          <Ionicons name="close" size={24} color={theme.tint} />
+        </TouchableOpacity>
+      ),
       headerRight: () =>
         launch ? (
           <TouchableOpacity onPress={() => toggleBookmark(launch.id)}>
@@ -55,11 +60,7 @@ export default function DetailScreen() {
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       {/* Tabs */}
       <View style={[styles.tabBar, { borderBottomColor: theme.border }]}>
-        {[
-          Tabs.OVERVIEW,
-          Tabs.LAUNCHPAD,
-          Tabs.MEDIA,
-        ].map((tab) => (
+        {[Tabs.OVERVIEW, Tabs.LAUNCHPAD, Tabs.MEDIA].map((tab) => (
           <TouchableOpacity
             key={tab}
             style={[
@@ -92,9 +93,7 @@ export default function DetailScreen() {
           <LaunchpadTab launchpad={launchpad} theme={theme} />
         )}
 
-        {activeTab === Tabs.MEDIA && (
-          <MediaTab launch={launch} theme={theme} />
-        )}
+        {activeTab === Tabs.MEDIA && <MediaTab launch={launch} theme={theme} />}
       </ScrollView>
     </View>
   );

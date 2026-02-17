@@ -32,7 +32,7 @@ export const useHomeScreenLogic = () => {
     theme,
     launches,
     isLoading,
-    isSyncing,
+    isRefetching: isSyncing,
     handleRefresh,
     handlePress,
   };
