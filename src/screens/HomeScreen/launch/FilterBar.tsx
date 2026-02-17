@@ -43,7 +43,7 @@ export const FilterBar = () => {
     if (search === '' && localSearch !== '') {
       setLocalSearch('');
     }
-  }, [search]);
+  }, [search, localSearch]);
 
   // ... (rest of filtering logic) ...
   const activeFilter = upcoming

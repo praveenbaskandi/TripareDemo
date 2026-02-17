@@ -12,8 +12,6 @@ export async function openDatabase() {
 }
 
 export async function migrateDb(db: SQLite.SQLiteDatabase) {
-  const DATABASE_VERSION = 1;
-
   // Enable foreign keys
   await db.execAsync('PRAGMA foreign_keys = ON;');
 
