@@ -99,13 +99,20 @@ export const ClusterMap = ({ launchpads, onMarkerPress }: ClusterMapProps) => {
 
                     // Not a cluster, single marker
                     const launchpadId = cluster.properties?.launchpadId;
+                    const attempts = cluster.properties?.launch_attempts || 0;
+
+                    // Color coding based on density (launch attempts)
+                    let markerColor = theme.success; // Low density (default)
+                    if (attempts >= 20) markerColor = theme.failure; // High density (Hot)
+                    else if (attempts >= 5) markerColor = "#F5A623"; // Medium density
+
                     return (
                         <Marker
                             key={`launchpad-${launchpadId}`}
                             coordinate={{ latitude, longitude }}
                             onPress={() => onMarkerPress(launchpadId)}
                         >
-                            <View style={[styles.marker, { backgroundColor: theme.card, borderColor: theme.success }]}>
+                            <View style={[styles.marker, { backgroundColor: theme.card, borderColor: markerColor }]}>
                                 <Text style={{ fontSize: 20 }}>🚀</Text>
                             </View>
                         </Marker>

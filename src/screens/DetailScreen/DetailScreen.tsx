@@ -29,6 +29,11 @@ export default function DetailScreen() {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: launch?.name || Strings.general.loading,
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 10 }}>
+          <Ionicons name="close" size={24} color={theme.tint} />
+        </TouchableOpacity>
+      ),
       headerRight: () =>
         launch ? (
           <TouchableOpacity onPress={() => toggleBookmark(launch.id)}>

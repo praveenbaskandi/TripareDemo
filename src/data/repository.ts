@@ -77,7 +77,16 @@ export class LaunchRepository {
     static async getLaunches(
         offset = 0,
         limit = 20,
-        filters?: { year?: string; success?: boolean; upcoming?: boolean; search?: string }
+        filters?: {
+            year?: string;
+            success?: boolean;
+            upcoming?: boolean;
+            search?: string;
+            rocket?: string;
+            launchpad?: string;
+            dateRange?: 'last30' | 'lastYear' | 'all';
+            sort?: 'dateDesc' | 'dateAsc' | 'nameAsc';
+        }
     ): Promise<Launch[]> {
         const db = await openDatabase();
 
@@ -100,15 +109,47 @@ export class LaunchRepository {
             query += ' AND name LIKE ?';
             params.push(`%${filters.search}%`);
         }
+        if (filters?.rocket) {
+            query += ' AND rocket_id = ?';
+            params.push(filters.rocket);
+        }
+        if (filters?.launchpad) {
+            query += ' AND launchpad_id = ?';
+            params.push(filters.launchpad);
+        }
+        if (filters?.dateRange) {
+            const now = Math.floor(Date.now() / 1000);
+            if (filters.dateRange === 'last30') {
+                const thirtyDaysAgo = now - 30 * 24 * 60 * 60;
+                query += ' AND date_unix >= ?';
+                params.push(thirtyDaysAgo);
+            } else if (filters.dateRange === 'lastYear') {
+                const oneYearAgo = now - 365 * 24 * 60 * 60;
+                query += ' AND date_unix >= ?';
+                params.push(oneYearAgo);
+            }
+        }
 
-        query += ' ORDER BY date_unix DESC LIMIT ? OFFSET ?';
+        let orderBy = 'ORDER BY date_unix DESC';
+        if (filters?.sort === 'dateAsc') {
+            orderBy = 'ORDER BY date_unix ASC';
+        } else if (filters?.sort === 'nameAsc') {
+            orderBy = 'ORDER BY name ASC';
+        }
+
+        query += ` ${orderBy} LIMIT ? OFFSET ?`;
         params.push(limit, offset);
 
         const result = await db.getAllAsync(query, params);
 
         // Map back to Launch interface
         return result.map((row: any) => ({
-            ...row,
+            id: row.id,
+            name: row.name,
+            date_utc: row.date_utc,
+            date_unix: row.date_unix,
+            details: row.details,
+            flight_number: row.flight_number,
             success: row.success === 1,
             upcoming: row.upcoming === 1,
             rocket: row.rocket_id,

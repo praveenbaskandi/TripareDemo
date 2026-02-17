@@ -6,6 +6,7 @@ import { ActivityIndicator, LogBox, View } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { migrateDb, openDatabase } from "@/data/database";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import AppNavigator from "@/navigation/AppNavigator";
@@ -45,7 +46,9 @@ export default function App() {
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <ActionSheetProvider>
-          <AppNavigator />
+          <ErrorBoundary>
+            <AppNavigator />
+          </ErrorBoundary>
         </ActionSheetProvider>
         <StatusBar style="auto" />
       </QueryClientProvider>

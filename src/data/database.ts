@@ -2,19 +2,23 @@ import * as SQLite from 'expo-sqlite';
 
 export const DATABASE_NAME = 'spacex.db';
 
+let dbInstance: SQLite.SQLiteDatabase | null = null;
+
 export async function openDatabase() {
-    const db = await SQLite.openDatabaseAsync(DATABASE_NAME);
-    return db;
+  if (!dbInstance) {
+    dbInstance = await SQLite.openDatabaseAsync(DATABASE_NAME);
+  }
+  return dbInstance;
 }
 
 export async function migrateDb(db: SQLite.SQLiteDatabase) {
-    const DATABASE_VERSION = 1;
+  const DATABASE_VERSION = 1;
 
-    // Enable foreign keys
-    await db.execAsync('PRAGMA foreign_keys = ON;');
+  // Enable foreign keys
+  await db.execAsync('PRAGMA foreign_keys = ON;');
 
-    // Create tables
-    await db.execAsync(`
+  // Create tables
+  await db.execAsync(`
     PRAGMA journal_mode = WAL;
     
     CREATE TABLE IF NOT EXISTS launches (
@@ -53,5 +57,5 @@ export async function migrateDb(db: SQLite.SQLiteDatabase) {
     CREATE INDEX IF NOT EXISTS idx_launches_rocket ON launches(rocket_id);
   `);
 
-    console.log('Database migrated successfully');
+  console.log('Database migrated successfully');
 }
