@@ -3,7 +3,7 @@ import { Strings } from "@/constants/Strings";
 import { Launchpad } from "@/types";
 import { Linking, Text, View } from "react-native";
 import MapView, { Marker } from "react-native-maps";
-import { styles } from "./DetailScreen.styles";
+import { styles } from "../DetailScreen.styles";
 
 interface LaunchpadTabProps {
   launchpad: Launchpad;
