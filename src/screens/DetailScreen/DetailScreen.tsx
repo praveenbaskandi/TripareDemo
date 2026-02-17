@@ -1,8 +1,9 @@
 import { Tabs } from "@/constants/Constants";
 import { Strings } from "@/constants/Strings";
+import { RootStackParamList } from "@/navigation/AppNavigator";
 import { Ionicons } from "@expo/vector-icons";
-import { Stack } from "expo-router";
-import React from "react";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import React, { useLayoutEffect } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./DetailScreen.styles";
 import { LaunchpadTab } from "./LaunchpadTab";
@@ -11,6 +12,10 @@ import { OverviewTab } from "./OverviewTab";
 import { useDetailScreenLogic } from "./useDetailScreenLogic";
 
 export default function DetailScreen() {
+  const route = useRoute<RouteProp<RootStackParamList, "Detail">>();
+  const navigation = useNavigation();
+  const { id } = route.params;
+
   const {
     launch,
     launchpad,
@@ -19,12 +24,27 @@ export default function DetailScreen() {
     isBookmarked,
     toggleBookmark,
     theme,
-  } = useDetailScreenLogic();
+  } = useDetailScreenLogic(id);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: launch?.name || Strings.general.loading,
+      headerRight: () =>
+        launch ? (
+          <TouchableOpacity onPress={() => toggleBookmark(launch.id)}>
+            <Ionicons
+              name={isBookmarked ? "bookmark" : "bookmark-outline"}
+              size={24}
+              color={theme.tint}
+            />
+          </TouchableOpacity>
+        ) : null,
+    });
+  }, [navigation, launch, isBookmarked, theme, toggleBookmark]);
 
   if (!launch)
     return (
       <View style={[styles.container, { backgroundColor: theme.background }]}>
-        <Stack.Screen options={{ title: Strings.general.loading }} />
         <View style={styles.loadingContainer}>
           <Text style={{ color: theme.text }}>{Strings.general.loading}</Text>
         </View>
@@ -33,23 +53,6 @@ export default function DetailScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <Stack.Screen
-        options={{
-          headerTitle: launch.name,
-          headerRight: () => (
-            <TouchableOpacity onPress={() => toggleBookmark(launch.id)}>
-              <Ionicons
-                name={isBookmarked ? "bookmark" : "bookmark-outline"}
-                size={24}
-                color={theme.tint}
-              />
-            </TouchableOpacity>
-          ),
-        }}
-      />
-
-
-
       {/* Tabs */}
       <View style={[styles.tabBar, { borderBottomColor: theme.border }]}>
         {[

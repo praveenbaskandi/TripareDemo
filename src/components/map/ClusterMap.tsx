@@ -1,4 +1,4 @@
-import { BBox, GeoJsonProperties } from 'geojson';
+import type { BBox, GeoJsonProperties } from 'geojson';
 import React, { useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import MapView, { Marker, Region } from 'react-native-maps';

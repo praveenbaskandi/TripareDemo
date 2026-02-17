@@ -1,10 +1,10 @@
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Launch } from "@/types";
 import { formatLaunchItemDate } from "@/utils/commonfunction";
 import { Image } from "expo-image";
 import { memo } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Colors } from "../../constants/Colors";
-import { useColorScheme } from "../../hooks/use-color-scheme";
-import { Launch } from "../../types";
 
 interface LaunchItemProps {
   launch: Launch;
@@ -151,4 +151,5 @@ const styles = StyleSheet.create({
   },
 });
 
+LaunchItem.displayName = "LaunchItem";
 export default LaunchItem;

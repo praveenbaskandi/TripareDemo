@@ -1,25 +1,21 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, LogBox, View } from "react-native";
 import "react-native-reanimated";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { migrateDb, openDatabase } from "@/data/database";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import AppNavigator from "@/navigation/AppNavigator";
 
-export const unstable_settings = {
-  anchor: "(tabs)",
-};
+// Ignore specific warnings if needed
+LogBox.ignoreLogs([]);
 
 const queryClient = new QueryClient();
 
-export default function RootLayout() {
+export default function App() {
   const colorScheme = useColorScheme();
   const [dbReady, setDbReady] = useState(false);
 
@@ -31,7 +27,6 @@ export default function RootLayout() {
         setDbReady(true);
       } catch (e) {
         console.error("Database migration failed:", e);
-        // Handle error specifically? For now just allow app to load, maybe generic error
         setDbReady(true);
       }
     }
@@ -47,17 +42,13 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        {/*
-          Using simple Stack for now. The previous setup had 'tabs' as the anchor.
-          We will likely keep the tabs but maybe rename the initial route or keep (tabs).
-        */}
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <ActionSheetProvider>
+          <AppNavigator />
+        </ActionSheetProvider>
         <StatusBar style="auto" />
-      </ThemeProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </SafeAreaProvider>
   );
 }

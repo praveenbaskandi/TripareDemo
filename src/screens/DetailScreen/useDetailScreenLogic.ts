@@ -4,11 +4,10 @@ import { LaunchRepository } from "@/data/repository";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useBookmarkStore } from "@/store";
 import { useQuery } from "@tanstack/react-query";
-import { useLocalSearchParams } from "expo-router";
 import { useState } from "react";
 
-export const useDetailScreenLogic = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
+export const useDetailScreenLogic = (id: string) => {
+  // const { id } = useLocalSearchParams<{ id: string }>(); // Removed
   const flavor = useColorScheme() ?? "light";
   const theme = Colors[flavor];
   const [activeTab, setActiveTab] = useState<string>(Tabs.OVERVIEW);

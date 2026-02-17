@@ -1,10 +1,10 @@
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Launch } from "@/types";
 import { formatLaunchHeaderDate } from "@/utils/commonfunction";
 import { FlashList } from "@shopify/flash-list";
 import React, { useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Colors } from "../../constants/Colors";
-import { useColorScheme } from "../../hooks/use-color-scheme";
-import { Launch } from "../../types";
 import LaunchItem from "./LaunchItem";
 
 interface LaunchListProps {
@@ -60,7 +60,7 @@ const LaunchList = ({
   };
 
   return (
-    <FlashList
+    <FlashList<string | Launch>
       data={data}
       renderItem={renderItem}
       estimatedItemSize={100}
