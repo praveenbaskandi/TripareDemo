@@ -110,6 +110,30 @@ npm test
 <img width="300" height="300" alt="ss_bookmark" src="https://github.com/user-attachments/assets/0ab6ffc8-54aa-4e3f-91c8-99c5eec43b7d" />
 
 
+### Detail Page Screen Shot
+
+- This page will give you Detail of the rockt launch
+- This page contains 3 tabs Overview, Launchpad and Media.
+
+#### Overview
+- This page will give you overview detail  of the launch we can also add notes in the app.
+  
+<img width="300" height="300" alt="Screenshot 2026-02-18 at 01 06 34" src="https://github.com/user-attachments/assets/5c64eea1-19fc-4dc1-817b-c5fe39e05687" />
+
+#### Launchpad
+- This page will give you detail of the launchpad and the location of the launchpad.
+- We can get direction of the launchpad from our location.
+  
+<img width="300" height="300" alt="Screenshot 2026-02-18 at 01 09 38" src="https://github.com/user-attachments/assets/146837ef-83cc-44d5-8239-3d0149a6f28b" />
+
+#### Media
+- This page will give you youtube video link which we can see from our phone.
+- And alos we can share the event with our friends
+<img width="300" height="300" alt="Screenshot 2026-02-18 at 01 01 06" src="https://github.com/user-attachments/assets/2847753e-eec3-433b-bb90-35fe878e9f8c" />
+
+
+
+
 
   
 
