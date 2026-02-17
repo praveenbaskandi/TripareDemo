@@ -74,3 +74,42 @@ Run unit tests with:
 npm test
 ```
 *Note: Some tests may require native module mocking configuration.*
+
+
+## Screen Shot
+
+### Launch Screen Shot
+
+- Home screeen contains list of launche, upcoming and failure. 
+- In this page search is also added.
+- We can also set filter in this page
+- We can categorise this into All, Upcoming, Success and Failure
+<img width="300" height="300" alt="ss_home" src="https://github.com/user-attachments/assets/11ea37e6-7240-4842-8399-ad720a1bf445" />
+
+
+
+### Filter Screen Shot
+
+- This page will show you how many type of filter we can add in the list.
+<img width="300" height="300" alt="ss_filter" src="https://github.com/user-attachments/assets/8e5fe767-7fe9-4ebf-a3db-b51a8adcb997" />
+
+
+
+
+### Map Screen Shot
+
+- This page will give you lauch points inside the map.
+- With total lauch pad and active display
+<img width="300" height="300" alt="ss_map" src="https://github.com/user-attachments/assets/6efb64b7-0a9f-4242-ad6c-cf5597ef2d38" />
+
+
+
+### Bookmark Screen Shot
+
+- This page will give you list of bookmark done by you in a list format
+<img width="300" height="300" alt="ss_bookmark" src="https://github.com/user-attachments/assets/0ab6ffc8-54aa-4e3f-91c8-99c5eec43b7d" />
+
+
+
+  
+
