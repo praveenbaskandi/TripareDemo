@@ -7,6 +7,7 @@ import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import { Platform } from "react-native";
+import BookmarksScreen from "../screens/BookmarksScreen/BookmarksScreen";
 import DetailScreen from "../screens/DetailScreen/DetailScreen";
 import HomeScreen from "../screens/HomeScreen/HomeScreen";
 import MapScreen from "../screens/MapScreen/MapScreen";
@@ -19,6 +20,7 @@ export type RootStackParamList = {
 export type MainTabParamList = {
   Home: undefined;
   Explore: undefined;
+  Bookmarks: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -53,7 +55,7 @@ function MainTabNavigator() {
         options={{
           title: "Launches",
           tabBarIcon: ({ color }) => (
-            <IconSymbol name="rocket.fill" size={28} color={color} />
+            <IconSymbol name="house.fill" size={28} color={color} />
           ),
         }}
       />
@@ -64,6 +66,16 @@ function MainTabNavigator() {
           title: "Map",
           tabBarIcon: ({ color }) => (
             <IconSymbol name="map.fill" size={28} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Bookmarks"
+        component={BookmarksScreen}
+        options={{
+          title: "Bookmarks",
+          tabBarIcon: ({ color }) => (
+            <IconSymbol name={"bookmark.fill" as any} size={28} color={color} />
           ),
         }}
       />

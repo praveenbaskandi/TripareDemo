@@ -23,6 +23,7 @@ const MAPPING = {
   "chevron.right": "chevron-right",
   "map.fill": "map",
   "rocket.fill": "rocket", // Adding rocket too just in case
+  "bookmark.fill": "bookmark", // Material Icon equivalent
 } as IconMapping;
 
 /**
