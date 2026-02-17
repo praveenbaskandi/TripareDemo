@@ -1,7 +1,8 @@
 import React from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LaunchList from "../HomeScreen/launch/LaunchList";
+import { styles } from "./BookmarksScreen.styles";
 import { useBookmarksScreenLogic } from "./useBookmarksScreenLogic";
 
 export default function BookmarksScreen() {
@@ -45,23 +46,3 @@ export default function BookmarksScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "rgba(150,150,150,0.1)",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
