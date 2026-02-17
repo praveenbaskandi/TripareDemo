@@ -39,11 +39,12 @@ export const FilterBar = () => {
   const theme = Colors[flavor];
 
   // Update local state when global search is cleared externally (if ever)
+  // Update local state when global search is cleared externally (e.g., via "Reset All Filters")
   React.useEffect(() => {
-    if (search === '' && localSearch !== '') {
-      setLocalSearch('');
+    if (search === "") {
+      setLocalSearch("");
     }
-  }, [search, localSearch]);
+  }, [search]);
 
   // ... (rest of filtering logic) ...
   const activeFilter = upcoming
