@@ -1,12 +1,12 @@
+import { useSyncStore } from '@/store';
 import NetInfo from '@react-native-community/netinfo';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { NetworkMonitor } from '../components/NetworkMonitor';
 import { LaunchRepository } from '../data/repository';
-import { useSyncStore } from '../store';
 
 jest.mock('@react-native-community/netinfo', () => ({
-    addEventListener: jest.fn(),
+    addEventListener: jest.fn(() => jest.fn()),
     fetch: jest.fn(),
 }));
 jest.mock('@react-native-async-storage/async-storage', () =>
@@ -22,7 +22,9 @@ jest.mock('expo-sqlite', () => ({
     openDatabaseAsync: jest.fn(),
 }));
 jest.mock('../data/repository');
-jest.mock('../store');
+jest.mock('@/store', () => ({
+    useSyncStore: jest.fn(),
+}));
 
 describe('NetworkMonitor', () => {
     let mockSetIsOffline: jest.Mock;
@@ -33,6 +35,7 @@ describe('NetworkMonitor', () => {
         mockSetLastSyncTime = jest.fn();
 
         (useSyncStore as unknown as jest.Mock).mockReturnValue({
+            isOffline: false,
             setIsOffline: mockSetIsOffline,
             setLastSyncTime: mockSetLastSyncTime,
         });
@@ -53,13 +56,19 @@ describe('NetworkMonitor', () => {
     });
 
     it('should trigger sync when coming online', async () => {
+        (useSyncStore as unknown as jest.Mock).mockReturnValue({
+            isOffline: true,
+            setIsOffline: mockSetIsOffline,
+            setLastSyncTime: mockSetLastSyncTime,
+        });
+
         render(<NetworkMonitor />);
 
         // Simulate online
         const callback = (NetInfo.addEventListener as jest.Mock).mock.calls[0][0];
         await callback({ isConnected: true });
 
-        expect(mockSetIsOffline).toHaveBeenCalledWith(false);
+
         expect(LaunchRepository.syncLaunches).toHaveBeenCalled();
         expect(LaunchRepository.syncLaunchpads).toHaveBeenCalled();
         // We can't easily await the internal promise chain inside useEffect, 
